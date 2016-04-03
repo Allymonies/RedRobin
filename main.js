@@ -163,7 +163,7 @@ try {
                             if (cmd == "help") {
                                 chat(smsg + ".commands to list commands, .man <command> to get help");
                             } else if (cmd == "commands") {
-                                chat(smsg + ".help | .commands | .man <cmd> | .insult <user> | .kill <user>")
+                                chat(smsg + ".help | .commands | .man <cmd> | .insult <user> | .kill <user> | .github")
                             } else if (cmd == "man") {
                                 var chelp = argz[1];
                                 if (chelp == "help") {
@@ -176,6 +176,8 @@ try {
                                     chat(smsg + ".kill <user> | kills <user>");
                                 } else if (chelp == "man") {
                                     chat(smsg + ".man <command> | Gives details on <command>");
+                                } else if (chelp == "github") {
+                                    chat(smsg + ".github | Returns github repository");
                                 } else {
                                     chat(smsg + "Unknown command! use .commands !");
                                 }
@@ -198,6 +200,8 @@ try {
                                 death = death.replace("USER", argz[1]);
                                 death = death.replace("MASTER", author);
                                 chat(smsg + death);
+                            } else if (cmd == "github") {
+                                chat(smsg + "https://github.com/luker2009/RedRobin");
                             }
                         }
                     } else if (msg["type"] == "merge") {
