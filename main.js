@@ -290,7 +290,9 @@ try {
         setInterval(function() {
             vote("INCREASE");
             if (announce == 1) {
-                chat(smsg + " Use .help to use this bot!");
+                setTimeout(function() {
+                    chat(smsg + " Use .help to use this bot!");
+                }, 8000);
             }
             announce = 1;
         }, 300000);
