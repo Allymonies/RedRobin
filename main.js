@@ -15,7 +15,6 @@ var default_config = '{"username":"undefined","password":"undefined","log_chat":
 
 var options;
 try {
-    fs.accessSync("config.json", fs.F_OK);
     fs.readFile('config.json', 'utf8', function(err, data) {
         if (err) {
             return console.log(err);
