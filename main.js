@@ -198,4 +198,3 @@ request.post({url:"https://www.reddit.com/api/login",headers: {"User-Agent": ua}
 setInterval( function() {
     vote("INCREASE");
 }, 300000);
-}
