@@ -9,7 +9,7 @@ var log_chat = false;
 var room;
 var modhash;
 
-default_config = '{"username":"undefined","password":"undefined","log_chat":false}'
+var default_config = '{"username":"undefined","password":"undefined","log_chat":false}';
 
 var options;
 try {
@@ -21,11 +21,13 @@ try {
       options = JSON.parse(data);
     });
 } catch (e) {
-    fs.writeFile("config.json",default_config, function(err) {
+    fs.writeFile("config.json", default_config, function(err) {
         if(err) {
-            console.log("Error occured");
+            return console.log(err);
         }
-      });
+    
+        console.log("The file was saved!");
+    }); 
   console.log("Created initial config file at config.json, please edit it!")
   process.exit();
 }
