@@ -50,6 +50,13 @@ function chat(msg) {
   });
 }
 
+function vote(choice) {
+  console.log("Voted.");
+  request.post({url: "https://www.reddit.com/api/robin/" + room + "/vote", headers: {"User-Agent": ua, "x-modhash":modhash}, jar: cookieJar, form: {api_type: "json", vote: choice, room_id: room} }, function(err, resp, body) {
+    console.log(body);
+  });
+}
+
 client.on("connect", function(connection) {
   console.log("Connected to websocket!");
   chat(smsg + " Connected to chat!");
@@ -156,3 +163,8 @@ request.post({url:"https://www.reddit.com/api/login",headers: {"User-Agent": ua}
     }, 1000);
   }
 });
+
+setInterval( function() {
+    vote("INCREASE");
+}, 300000);
+}
