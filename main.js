@@ -74,6 +74,29 @@ try {
             "USER is a spooOOOoooky ghost now!"
         ];
         var client = new websocket();
+        
+        var do_shuffle = 0;
+        
+        function shuffle(array) {
+            //From http://stackoverflow.com/a/6274398/6150373 by "Blender"
+            let counter = array.length;
+
+            // While there are elements in the array
+            while (counter > 0) {
+                // Pick a random index
+                let index = Math.floor(Math.random() * counter);
+
+                // Decrease counter by 1
+                counter--;
+
+                // And swap the last element with it
+                let temp = array[counter];
+                array[counter] = array[index];
+                array[index] = temp;
+            }
+
+            return array;
+        }
 
         function chat(msg) {
             console.log("Sent reply");
@@ -127,8 +150,7 @@ try {
                         txt = txt.replace(/[^ -~]/g, "");
                         //console.log(author + ": " + txt);
                         if (log_chat == true) {
-                            fs.appendFile('chatlog.txt', author + ": " + txt, function (err) {
-                            });
+                            fs.appendFile('chatlog.txt', author + ": " + txt, function(err) {});
                         }
                         if (txt.substring(0, 1) == "@" || txt.substring(0, 1) == '%') {
                             console.log(author + ": " + txt);
@@ -158,11 +180,21 @@ try {
                                     chat(smsg + "Unknown command! use .commands !");
                                 }
                             } else if (cmd == "insult") {
-                                var insult = insults[Math.floor(Math.random() * insults.length)];
+                                do_shuffle = do_shuffle +1;
+                                if (do_shuffle > 6) {
+                                    do_shuffle = 0;
+                                    insults = shuffle(insults);
+                                }
+                                var insult = insults[do_shuffle];
                                 insult = insult.replace("USER", argz[1]);
                                 chat(smsg + insult);
                             } else if (cmd == "kill") {
-                                var death = deaths[Math.floor(Math.random() * deaths.length)];
+                                do_shuffle = do_shuffle +1;
+                                if (do_shuffle > 6) {
+                                    do_shuffle = 0;
+                                    deaths = shuffle(deaths);
+                                }
+                                var death = deaths[do_shuffle];
                                 death = death.replace("USER", argz[1]);
                                 death = death.replace("MASTER", author);
                                 chat(smsg + death);
@@ -175,7 +207,7 @@ try {
             });
         });
 
-        var ver = "1.3";
+        var ver = "1.4";
         var ua = "RedRobin v" + ver + " by /u/ImAKidImASquid";
         var smsg = "[RedRobin v" + ver + "] ";
         var details = {
