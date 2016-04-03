@@ -5,8 +5,39 @@ var util = require("util");
 
 var username = "USERNAME";
 var password = "PASSWORD";
+var log_chat = false;
 var room;
 var modhash;
+
+default_config = '{"username":"undefined","password":"undefined","log_chat":false}'
+
+var options;
+try {
+    fs.accessSync("config.json", fs.F_OK);
+    fs.readFile('config.json', 'utf8', function (err,data) {
+      if (err) {
+        return console.log(err);
+      }
+      options = JSON.parse(data);
+    });
+} catch (e) {
+    fs.writeFile("config.json",default_config, function(err) {
+        if(err) {
+            console.log("Error occured");
+        }
+      });
+  console.log("Created initial config file at config.json, please edit it!")
+  process.exit();
+}
+
+if (options["username"] != "undefined") {
+  if (options["password"] != "undefined") {
+    username = options["username"];
+    password = options["password"];
+  }
+}
+
+log_chat = options["log_chat"]
 
 var insults = [
 "USER looks like a pinecone!",
@@ -150,7 +181,7 @@ request.post({url:"https://www.reddit.com/api/login",headers: {"User-Agent": ua}
                users.push(userlist[c]["name"])
             }
             var date = new Date();
-            fs.writeFile("/root/robin/users-b/users-" + date.getUTCHours().toString() + "-" + date.getUTCMinutes().toString() + ".txt", "[" + users.toString() + "]", function(err) {
+            fs.writeFile("users-b/users-" + date.getUTCHours().toString() + "-" + date.getUTCMinutes().toString() + ".txt", "[" + users.toString() + "]", function(err) {
               if(err) {
                 console.log("Error occured");
               }
