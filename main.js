@@ -44,7 +44,12 @@ try {
             "I'd rather drink bleach than even see USER.",
             "Does anyone else think USER should die?",
             "USER is probably salty he isn't as swag as me.",
-            "USER isn't /that/ bad of a guy, I guess."
+            "USER isn't /that/ bad of a guy, I guess.",
+            "USER probably uses a script.",
+            "If USER left this chat we'd hold a party.",
+            "USER is so boring /I/ almost fell asleep.",
+            "I don't believe what they say about you USER <3",
+            "What they say about USER is probably true."
         ];
 
         var deaths = [
@@ -62,7 +67,12 @@ try {
             "MASTER and USER both died together.",
             "USER died of cancer.",
             "MASTER infected USER with a virus, he died.",
-            "USER died."
+            "USER died.",
+            "USER fell into a macerator.",
+            "USER was mobbed.",
+            "USER was impaled by a pitchfork.",
+            "USER drank too much bleach.",
+            "USER is a spooOOOoooky ghost now!"
         ];
         var client = new websocket();
 
