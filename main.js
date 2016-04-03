@@ -9,6 +9,8 @@ var log_chat = false;
 var room;
 var modhash;
 
+var announce = 0;
+
 var default_config = '{"username":"undefined","password":"undefined","log_chat":false}';
 
 var options;
@@ -115,6 +117,10 @@ try {
                         author = author.replace(/[^ -~]/g, "");
                         txt = txt.replace(/[^ -~]/g, "");
                         //console.log(author + ": " + txt);
+                        if (log_chat == true) {
+                            fs.appendFile('chatlog.txt', author + ": " + txt, function (err) {
+                            });
+                        }
                         if (txt.substring(0, 1) == "@" || txt.substring(0, 1) == '%') {
                             console.log(author + ": " + txt);
                         }
@@ -122,6 +128,7 @@ try {
                         if (txt.substring(0, 1) == ".") {
                             var cmd = txt.substring(1).split(' ')[0];
                             var argz = txt.substring(1).split(" ");
+                            announce = 0;
                             if (cmd == "help") {
                                 chat(smsg + ".commands to list commands, .man <command> to get help");
                             } else if (cmd == "commands") {
@@ -136,6 +143,8 @@ try {
                                     chat(smsg + ".insult <user> | insults <user>");
                                 } else if (chelp == "kill") {
                                     chat(smsg + ".kill <user> | kills <user>");
+                                } else if (chelp == "man") {
+                                    chat(smsg + ".man <command> | Gives details on <command>");
                                 } else {
                                     chat(smsg + "Unknown command! use .commands !");
                                 }
@@ -157,7 +166,7 @@ try {
             });
         });
 
-        var ver = "1.2";
+        var ver = "1.3";
         var ua = "RedRobin v" + ver + " by /u/ImAKidImASquid";
         var smsg = "[RedRobin v" + ver + "] ";
         var details = {
@@ -239,6 +248,10 @@ try {
 
         setInterval(function() {
             vote("INCREASE");
+            if (announce == 1) {
+                chat(smsg + " Use .help to use this bot!");
+            }
+            announce = 1;
         }, 300000);
 
     });
