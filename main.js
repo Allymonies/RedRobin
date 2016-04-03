@@ -27,9 +27,9 @@ try {
         }
     
         console.log("The file was saved!");
+        console.log("Created initial config file at config.json, please edit it!")
+        process.exit();
     }); 
-  console.log("Created initial config file at config.json, please edit it!")
-  process.exit();
 }
 
 if (options["username"] != "undefined") {
