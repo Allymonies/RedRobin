@@ -267,7 +267,7 @@ try {
                                         jar: cookieJar,
                                         headers: {
                                             "User-Agent": ua,
-                                            x - modhash: modhash
+                                            "x-modhash": modhash
                                         }
                                     }, function(jer, jres, jbod) {
                                         request({
