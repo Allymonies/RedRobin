@@ -242,7 +242,7 @@ try {
             }
         }, function(err, httpResponse, body) {
             if (!err) {
-                if (body.indexOf('"logged": false') == -1) {
+                if (body.indexOf('WRONG_PASSWORD') == -1) {
                     setTimeout(function() {
                         request({
                             url: "https://www.reddit.com/robin/join",
