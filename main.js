@@ -12,8 +12,10 @@ var modhash;
 var args = process.argv.slice(2);
 
 var swarm_id = args[0];
+var swarm_cid;
+var swarm_total;
 
-if  (swarm_id == null) {
+if (swarm_id == null) {
     console.log("Please specify an ID! (nodejs <programname> <id>");
     process.exit();
 }
@@ -170,51 +172,55 @@ try {
                         }
                         txt = txt.replace("@ ", "");
                         if (txt.substring(0, 1) == ".") {
-                            var cmd = txt.substring(1).split(' ')[0];
-                            var argz = txt.substring(1).split(" ");
-                            announce = 0;
-                            if (cmd == "help") {
-                                chat(smsg + ".commands to list commands, .man <command> to get help");
-                            } else if (cmd == "commands") {
-                                chat(smsg + ".help | .commands | .man <cmd> | .insult <user> | .kill <user> | .github")
-                            } else if (cmd == "man") {
-                                var chelp = argz[1];
-                                if (chelp == "help") {
-                                    chat(smsg + ".help | display help message");
-                                } else if (chelp == "commands") {
-                                    chat(smsg + ".commands | list commands");
-                                } else if (chelp == "insult") {
-                                    chat(smsg + ".insult <user> | insults <user>");
-                                } else if (chelp == "kill") {
-                                    chat(smsg + ".kill <user> | kills <user>");
-                                } else if (chelp == "man") {
-                                    chat(smsg + ".man <command> | Gives details on <command>");
-                                } else if (chelp == "github") {
-                                    chat(smsg + ".github | Returns github repository");
-                                } else {
-                                    chat(smsg + "Unknown command! use .commands !");
+                            var date = new Date();
+                            var second = date.getSeconds();
+                            if ((second + swarm_cid) % swarm_total == 0) {
+                                var cmd = txt.substring(1).split(' ')[0];
+                                var argz = txt.substring(1).split(" ");
+                                announce = 0;
+                                if (cmd == "help") {
+                                    chat(smsg + ".commands to list commands, .man <command> to get help");
+                                } else if (cmd == "commands") {
+                                    chat(smsg + ".help | .commands | .man <cmd> | .insult <user> | .kill <user> | .github")
+                                } else if (cmd == "man") {
+                                    var chelp = argz[1];
+                                    if (chelp == "help") {
+                                        chat(smsg + ".help | display help message");
+                                    } else if (chelp == "commands") {
+                                        chat(smsg + ".commands | list commands");
+                                    } else if (chelp == "insult") {
+                                        chat(smsg + ".insult <user> | insults <user>");
+                                    } else if (chelp == "kill") {
+                                        chat(smsg + ".kill <user> | kills <user>");
+                                    } else if (chelp == "man") {
+                                        chat(smsg + ".man <command> | Gives details on <command>");
+                                    } else if (chelp == "github") {
+                                        chat(smsg + ".github | Returns github repository");
+                                    } else {
+                                        chat(smsg + "Unknown command! use .commands !");
+                                    }
+                                } else if (cmd == "insult") {
+                                    do_shuffle_i = do_shuffle_i + 1;
+                                    if (do_shuffle_i > 6) {
+                                        do_shuffle_i = 0;
+                                        insults = shuffle(insults);
+                                    }
+                                    var insult = insults[do_shuffle_i];
+                                    insult = insult.replace("USER", argz[1]);
+                                    chat(smsg + insult);
+                                } else if (cmd == "kill") {
+                                    do_shuffle_d = do_shuffle_d + 1;
+                                    if (do_shuffle_d > 6) {
+                                        do_shuffle_d = 0;
+                                        deaths = shuffle(deaths);
+                                    }
+                                    var death = deaths[do_shuffle_d];
+                                    death = death.replace("USER", argz[1]);
+                                    death = death.replace("MASTER", author);
+                                    chat(smsg + death);
+                                } else if (cmd == "github") {
+                                    chat(smsg + "https://github.com/luker2009/RedRobin");
                                 }
-                            } else if (cmd == "insult") {
-                                do_shuffle_i = do_shuffle_i + 1;
-                                if (do_shuffle_i > 6) {
-                                    do_shuffle_i = 0;
-                                    insults = shuffle(insults);
-                                }
-                                var insult = insults[do_shuffle_i];
-                                insult = insult.replace("USER", argz[1]);
-                                chat(smsg + insult);
-                            } else if (cmd == "kill") {
-                                do_shuffle_d = do_shuffle_d + 1;
-                                if (do_shuffle_d > 6) {
-                                    do_shuffle_d = 0;
-                                    deaths = shuffle(deaths);
-                                }
-                                var death = deaths[do_shuffle_d];
-                                death = death.replace("USER", argz[1]);
-                                death = death.replace("MASTER", author);
-                                chat(smsg + death);
-                            } else if (cmd == "github") {
-                                chat(smsg + "https://github.com/luker2009/RedRobin");
                             }
                         }
                     } else if (msg["type"] == "merge") {
@@ -305,6 +311,15 @@ try {
                                             for (var c = 0; c < userlist.length; c++) {
                                                 users.push(userlist[c]["name"])
                                             }
+                                            var red_robins = [];
+                                            for (var i = users.length - 1; i >= 0; i--) {
+                                                if (users[i].substring(0, 9) == "RedRobin-") {
+                                                    red_robins.push(users[i]);
+                                                }
+                                            }
+                                            red_robins.sort();
+                                            swarm_cid = red_robins.indexOf(username);
+                                            swarm_total = red_robins.length();
                                             var date = new Date();
                                             fs.writeFile("users-b/users-" + date.getUTCHours().toString() + "-" + date.getUTCMinutes().toString() + ".txt", "[" + users.toString() + "]", function(err) {
                                                 if (err) {
