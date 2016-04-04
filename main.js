@@ -75,7 +75,8 @@ try {
         ];
         var client = new websocket();
         
-        var do_shuffle = 0;
+        var do_shuffle_i = 0;
+        var do_shuffle_d = 0;
         
         function shuffle(array) {
             //From http://stackoverflow.com/a/6274398/6150373 by "Blender"
@@ -182,21 +183,21 @@ try {
                                     chat(smsg + "Unknown command! use .commands !");
                                 }
                             } else if (cmd == "insult") {
-                                do_shuffle = do_shuffle +1;
-                                if (do_shuffle > 6) {
-                                    do_shuffle = 0;
+                                do_shuffle_i = do_shuffle_i +1;
+                                if (do_shuffle_i > 6) {
+                                    do_shuffle_i = 0;
                                     insults = shuffle(insults);
                                 }
-                                var insult = insults[do_shuffle];
+                                var insult = insults[do_shuffle_i];
                                 insult = insult.replace("USER", argz[1]);
                                 chat(smsg + insult);
                             } else if (cmd == "kill") {
-                                do_shuffle = do_shuffle +1;
-                                if (do_shuffle > 6) {
-                                    do_shuffle = 0;
+                                do_shuffle_d = do_shuffle_d +1;
+                                if (do_shuffle_d > 6) {
+                                    do_shuffle_d = 0;
                                     deaths = shuffle(deaths);
                                 }
-                                var death = deaths[do_shuffle];
+                                var death = deaths[do_shuffle_d];
                                 death = death.replace("USER", argz[1]);
                                 death = death.replace("MASTER", author);
                                 chat(smsg + death);
