@@ -74,10 +74,10 @@ try {
             "USER is a spooOOOoooky ghost now!"
         ];
         var client = new websocket();
-        
+
         var do_shuffle_i = 0;
         var do_shuffle_d = 0;
-        
+
         function shuffle(array) {
             //From http://stackoverflow.com/a/6274398/6150373 by "Blender"
             let counter = array.length;
@@ -183,7 +183,7 @@ try {
                                     chat(smsg + "Unknown command! use .commands !");
                                 }
                             } else if (cmd == "insult") {
-                                do_shuffle_i = do_shuffle_i +1;
+                                do_shuffle_i = do_shuffle_i + 1;
                                 if (do_shuffle_i > 6) {
                                     do_shuffle_i = 0;
                                     insults = shuffle(insults);
@@ -192,7 +192,7 @@ try {
                                 insult = insult.replace("USER", argz[1]);
                                 chat(smsg + insult);
                             } else if (cmd == "kill") {
-                                do_shuffle_d = do_shuffle_d +1;
+                                do_shuffle_d = do_shuffle_d + 1;
                                 if (do_shuffle_d > 6) {
                                     do_shuffle_d = 0;
                                     deaths = shuffle(deaths);
@@ -258,32 +258,49 @@ try {
                                     "User-Agent": ua
                                 }
                             }, function(error, response, bodyb) {
-                                var rwup = bodyb.indexOf("robin_websocket_url");
-                                var rwu = bodyb.substring(rwup + "robin_websocket_url".length + 4);
-                                rwu = rwu.split('"')[0];
-                                var wsurl = rwu.replace("\\u0026", "&").replace("\\u0026", "&");
-                                client.connect(wsurl);
                                 var mhp = bodyb.indexOf("modhash");
                                 modhash = bodyb.substring(mhp + "modhash".length + 4);
                                 modhash = modhash.split('"')[0];
-                                var roomp = bodyb.indexOf("robin_room_id");
-                                room = bodyb.substring(roomp + "robin_room_id".length + 4);
-                                room = room.split('"')[0];
-                                var userp = bodyb.indexOf("robin_user_list");
-                                var userlist = bodyb.substring(userp + "robin_user_list".length + 4);
-                                userlist = "[" + userlist.split(']')[0] + "]";
-                                var userlist = JSON.parse(userlist);
-                                var users = [];
-                                for (var c = 0; c < userlist.length; c++) {
-                                    users.push(userlist[c]["name"])
-                                }
-                                var date = new Date();
-                                fs.writeFile("users-b/users-" + date.getUTCHours().toString() + "-" + date.getUTCMinutes().toString() + ".txt", "[" + users.toString() + "]", function(err) {
-                                    if (err) {
-                                        console.log("Error occured");
+                                request.post({
+                                    url: "https://www.reddit.com/api/join_room",
+                                    jar: cookieJar,
+                                    headers: {
+                                        "User-Agent": ua,
+                                        x - modhash: modhash
                                     }
+                                }, function(jer, jres, jbod) {
+                                    request({
+                                        url: "https://www.reddit.com/robin",
+                                        jar: cookieJar,
+                                        headers: {
+                                            "User-Agent": ua
+                                        }
+                                    }, function(error, response, bodyb) {
+                                        var rwup = bodyb.indexOf("robin_websocket_url");
+                                        var rwu = bodyb.substring(rwup + "robin_websocket_url".length + 4);
+                                        rwu = rwu.split('"')[0];
+                                        var wsurl = rwu.replace("\\u0026", "&").replace("\\u0026", "&");
+                                        client.connect(wsurl);
+                                        var roomp = bodyb.indexOf("robin_room_id");
+                                        room = bodyb.substring(roomp + "robin_room_id".length + 4);
+                                        room = room.split('"')[0];
+                                        var userp = bodyb.indexOf("robin_user_list");
+                                        var userlist = bodyb.substring(userp + "robin_user_list".length + 4);
+                                        userlist = "[" + userlist.split(']')[0] + "]";
+                                        var userlist = JSON.parse(userlist);
+                                        var users = [];
+                                        for (var c = 0; c < userlist.length; c++) {
+                                            users.push(userlist[c]["name"])
+                                        }
+                                        var date = new Date();
+                                        fs.writeFile("users-b/users-" + date.getUTCHours().toString() + "-" + date.getUTCMinutes().toString() + ".txt", "[" + users.toString() + "]", function(err) {
+                                            if (err) {
+                                                console.log("Error occured");
+                                            }
 
-                                    //console.log("User file saved!");
+                                            //console.log("User file saved!");
+                                        });
+                                    });
                                 });
                             });
                         }, 1000);
