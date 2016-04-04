@@ -9,13 +9,25 @@ var log_chat = false;
 var room;
 var modhash;
 
+var args = process.argv.slice(2);
+
+var swarm_id = args[0];
+
+if  (swarm_id == null) {
+    console.log("Please specify an ID! (nodejs <programname> <id>");
+    process.exit();
+}
+
 var announce = 0;
 
 var default_config = '{"username":"undefined","password":"undefined","log_chat":false}';
 
 var options;
+
+var config_file = "config_" + swarm_id.toString() + ".json";
+
 try {
-    fs.readFile('config.json', 'utf8', function(err, data) {
+    fs.readFile(config_file, 'utf8', function(err, data) {
         if (err) {
             return console.log(err);
         }
@@ -326,13 +338,13 @@ try {
 
     });
 } catch (e) {
-    fs.writeFile("config.json", default_config, function(err) {
+    fs.writeFile(config_file, default_config, function(err) {
         if (err) {
             return console.log(err);
         }
 
         console.log("The file was saved!");
-        console.log("Created initial config file at config.json, please edit it!")
+        console.log("Created initial config file at " + config_file + ", please edit it!")
         process.exit();
     });
 }
