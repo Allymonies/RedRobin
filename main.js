@@ -212,7 +212,7 @@ try {
             });
         });
 
-        var ver = "1.4";
+        var ver = "1.5";
         var ua = "RedRobin v" + ver + " by /u/ImAKidImASquid";
         var smsg = "[RedRobin v" + ver + "] ";
         var details = {
@@ -242,70 +242,75 @@ try {
             }
         }, function(err, httpResponse, body) {
             if (!err) {
-                setTimeout(function() {
-                    request({
-                        url: "https://www.reddit.com/robin/join",
-                        jar: cookieJar,
-                        headers: {
-                            "User-Agent": ua
-                        }
-                    }, function(error, response, body) {
-                        setTimeout(function() {
-                            request({
-                                url: "https://www.reddit.com/robin",
-                                jar: cookieJar,
-                                headers: {
-                                    "User-Agent": ua
-                                }
-                            }, function(error, response, bodyb) {
-                                var mhp = bodyb.indexOf("modhash");
-                                modhash = bodyb.substring(mhp + "modhash".length + 4);
-                                modhash = modhash.split('"')[0];
-                                request.post({
-                                    url: "https://www.reddit.com/api/join_room",
+                if (body.indexOf('"logged": false') == -1) {
+                    setTimeout(function() {
+                        request({
+                            url: "https://www.reddit.com/robin/join",
+                            jar: cookieJar,
+                            headers: {
+                                "User-Agent": ua
+                            }
+                        }, function(error, response, body) {
+                            setTimeout(function() {
+                                request({
+                                    url: "https://www.reddit.com/robin",
                                     jar: cookieJar,
                                     headers: {
-                                        "User-Agent": ua,
-                                        x - modhash: modhash
+                                        "User-Agent": ua
                                     }
-                                }, function(jer, jres, jbod) {
-                                    request({
-                                        url: "https://www.reddit.com/robin",
+                                }, function(error, response, bodyb) {
+                                    var mhp = bodyb.indexOf("modhash");
+                                    modhash = bodyb.substring(mhp + "modhash".length + 4);
+                                    modhash = modhash.split('"')[0];
+                                    request.post({
+                                        url: "https://www.reddit.com/api/join_room",
                                         jar: cookieJar,
                                         headers: {
-                                            "User-Agent": ua
+                                            "User-Agent": ua,
+                                            x - modhash: modhash
                                         }
-                                    }, function(error, response, bodyb) {
-                                        var rwup = bodyb.indexOf("robin_websocket_url");
-                                        var rwu = bodyb.substring(rwup + "robin_websocket_url".length + 4);
-                                        rwu = rwu.split('"')[0];
-                                        var wsurl = rwu.replace("\\u0026", "&").replace("\\u0026", "&");
-                                        client.connect(wsurl);
-                                        var roomp = bodyb.indexOf("robin_room_id");
-                                        room = bodyb.substring(roomp + "robin_room_id".length + 4);
-                                        room = room.split('"')[0];
-                                        var userp = bodyb.indexOf("robin_user_list");
-                                        var userlist = bodyb.substring(userp + "robin_user_list".length + 4);
-                                        userlist = "[" + userlist.split(']')[0] + "]";
-                                        var userlist = JSON.parse(userlist);
-                                        var users = [];
-                                        for (var c = 0; c < userlist.length; c++) {
-                                            users.push(userlist[c]["name"])
-                                        }
-                                        var date = new Date();
-                                        fs.writeFile("users-b/users-" + date.getUTCHours().toString() + "-" + date.getUTCMinutes().toString() + ".txt", "[" + users.toString() + "]", function(err) {
-                                            if (err) {
-                                                console.log("Error occured");
+                                    }, function(jer, jres, jbod) {
+                                        request({
+                                            url: "https://www.reddit.com/robin",
+                                            jar: cookieJar,
+                                            headers: {
+                                                "User-Agent": ua
                                             }
+                                        }, function(error, response, bodyb) {
+                                            var rwup = bodyb.indexOf("robin_websocket_url");
+                                            var rwu = bodyb.substring(rwup + "robin_websocket_url".length + 4);
+                                            rwu = rwu.split('"')[0];
+                                            var wsurl = rwu.replace("\\u0026", "&").replace("\\u0026", "&");
+                                            client.connect(wsurl);
+                                            var roomp = bodyb.indexOf("robin_room_id");
+                                            room = bodyb.substring(roomp + "robin_room_id".length + 4);
+                                            room = room.split('"')[0];
+                                            var userp = bodyb.indexOf("robin_user_list");
+                                            var userlist = bodyb.substring(userp + "robin_user_list".length + 4);
+                                            userlist = "[" + userlist.split(']')[0] + "]";
+                                            var userlist = JSON.parse(userlist);
+                                            var users = [];
+                                            for (var c = 0; c < userlist.length; c++) {
+                                                users.push(userlist[c]["name"])
+                                            }
+                                            var date = new Date();
+                                            fs.writeFile("users-b/users-" + date.getUTCHours().toString() + "-" + date.getUTCMinutes().toString() + ".txt", "[" + users.toString() + "]", function(err) {
+                                                if (err) {
+                                                    console.log("Error occured");
+                                                }
 
-                                            //console.log("User file saved!");
+                                                //console.log("User file saved!");
+                                            });
                                         });
                                     });
                                 });
-                            });
-                        }, 1000);
-                    });
-                }, 1000);
+                            }, 1000);
+                        });
+                    }, 1000);
+                } else {
+                    console.log("Failed to login, please check your login details.");
+                    process.exit();
+                }
             }
         });
 
