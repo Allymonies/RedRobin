@@ -38,9 +38,7 @@ try {
             "I don't like USER.",
             "No one likes USER.",
             "No one would miss USER.",
-            "USER is the reason cancer exists",
-            "Cancer would be a preferable alternative to USER.",
-            "I'd rather drink bleach than even see USER.",
+            "I'd rather fall off the earth than see USER again",
             "Does anyone else think USER should die?",
             "USER is probably salty he isn't as swag as me.",
             "USER isn't /that/ bad of a guy, I guess.",
@@ -64,13 +62,11 @@ try {
             "MASTER shot USER.",
             "USER rebelled against MASTER for the last time.",
             "MASTER and USER both died together.",
-            "USER died of cancer.",
             "MASTER infected USER with a virus, he died.",
             "USER died.",
             "USER fell into a macerator.",
             "USER was mobbed.",
             "USER was impaled by a pitchfork.",
-            "USER drank too much bleach.",
             "USER is a spooOOOoooky ghost now!"
         ];
         var client = new websocket();
